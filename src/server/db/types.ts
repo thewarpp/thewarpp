@@ -4,22 +4,41 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
-export interface post {
-    id: Generated<number>;
-    name: string;
+import type { account_type } from "./enums";
+
+export type account = {
+    id: Generated<string>;
     created_at: Generated<Timestamp>;
     updated_at: Timestamp;
+    type: account_type;
     user_id: string;
-}
-export interface user {
+    workspace_id: string;
+};
+export type user = {
     id: Generated<string>;
     first_name: string;
     last_name: string | null;
     email: string;
     created_at: Generated<Timestamp>;
     updated_at: Timestamp;
-}
-export interface DB {
-    post: post;
+};
+export type workspace = {
+    id: Generated<string>;
+    name: string;
+    created_at: Generated<Timestamp>;
+    updated_at: Timestamp;
+};
+export type youtube = {
+    created_at: Generated<Timestamp>;
+    updated_at: Timestamp;
+    id: Generated<string>;
+    refresh_token: string;
+    access_token: string;
+    workspace_id: string;
+};
+export type DB = {
+    account: account;
     user: user;
-}
+    workspace: workspace;
+    youtube: youtube;
+};

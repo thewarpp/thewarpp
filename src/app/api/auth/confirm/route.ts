@@ -25,8 +25,8 @@ export async function GET(request: NextRequest) {
     });
 
     if (!error && data.user) {
-      try {
-        if (type === "signup") {
+      if (type === "signup") {
+        try {
           interface user_metadata {
             first_name: string;
             last_name?: string;
@@ -45,11 +45,12 @@ export async function GET(request: NextRequest) {
               updated_at: new Date(),
               id: data.user.id,
             })
+
             .executeTakeFirstOrThrow();
+        } catch (error) {
+          redirectTo.searchParams.delete("next");
+          return NextResponse.redirect(redirectTo);
         }
-      } catch (error) {
-        redirectTo.searchParams.delete("next");
-        return NextResponse.redirect(redirectTo);
       }
 
       redirectTo.searchParams.delete("next");

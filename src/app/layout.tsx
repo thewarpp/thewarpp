@@ -1,13 +1,12 @@
 import "~/styles/globals.css";
 
-import { Spline_Sans_Mono } from "next/font/google";
+import { Syne } from "next/font/google";
 
-import { Header } from "~/components/header";
 import { Toaster } from "~/components/ui/sonner";
 import { cn } from "~/lib/utils";
 import { TRPCReactProvider } from "~/trpc/react";
 
-const splineSansMono = Spline_Sans_Mono({
+const syne = Syne({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -27,14 +26,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          `bg-background font-sans text-foreground antialiased`,
-          splineSansMono.variable,
+          `scroll-smooth bg-background font-sans text-foreground antialiased`,
+          syne.variable,
         )}
       >
-        <TRPCReactProvider>
-          <Header />
-          {children}
-        </TRPCReactProvider>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
         <Toaster />
       </body>
     </html>

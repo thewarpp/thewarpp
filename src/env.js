@@ -12,6 +12,10 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+
+    YOUR_CLIENT_ID: z.string(),
+    YOUR_CLIENT_SECRET: z.string(),
+    YOUR_REDIRECT_URL: z.string().url(),
   },
 
   /**
@@ -35,6 +39,10 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     DIRECT_URL: process.env.DIRECT_URL,
     NODE_ENV: process.env.NODE_ENV,
+
+    YOUR_CLIENT_ID: process.env.YOUR_CLIENT_ID,
+    YOUR_CLIENT_SECRET: process.env.YOUR_CLIENT_SECRET,
+    YOUR_REDIRECT_URL: process.env.YOUR_REDIRECT_URL,
 
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },

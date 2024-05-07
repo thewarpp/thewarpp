@@ -58,7 +58,12 @@ export async function updateSession(request: NextRequest) {
 
   const { data } = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.includes("auth/confirm")) return response;
+  if (
+    request.nextUrl.pathname.includes("auth/confirm") ||
+    request.nextUrl.pathname === "/"
+  ) {
+    return response;
+  }
 
   const redirectUrl = request.nextUrl.clone();
   if (request.nextUrl.pathname.includes("auth") && data.user?.id) {
@@ -66,7 +71,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (request.nextUrl.pathname === "/" && !data.user?.id) {
+  if (!request.nextUrl.pathname.includes("auth") && !data.user?.id) {
     redirectUrl.pathname = "/auth/login";
     return NextResponse.redirect(redirectUrl);
   }
