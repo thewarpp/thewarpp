@@ -2,6 +2,7 @@ import { type CookieOptions, createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { env } from "~/env";
+import { db } from "~/server/db";
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
@@ -69,6 +70,25 @@ export async function updateSession(request: NextRequest) {
   if (!request.nextUrl.pathname.includes("auth") && !data.user?.id) {
     redirectUrl.pathname = "/auth/login";
     return NextResponse.redirect(redirectUrl);
+  }
+
+  if (request.nextUrl.pathname.includes("workspace")) {
+    const uuid = request.nextUrl.pathname.split("/")[2]!;
+    const workspace = await db
+      .selectFrom("workspace")
+      .innerJoin("account as a", "a.workspace_id", "workspace.id")
+      .where(($) =>
+        $.and([
+          $.eb("a.user_id", "=", data.user!.id),
+          $.eb("workspace.id", "=", uuid),
+        ]),
+      )
+      .select("name")
+      .executeTakeFirst();
+
+    if (!workspace?.name) {
+      return NextResponse.redirect("/not-found");
+    }
   }
 
   return response;
