@@ -6,6 +6,7 @@ import {
   LineChart,
   Package,
   Package2,
+  Settings,
   ShoppingCart,
   Users,
 } from "lucide-react";
@@ -104,6 +105,17 @@ export const SideBar = () => {
             >
               <LineChart className="h-4 w-4" />
               Analytics
+            </Link>
+
+            <Link
+              href={`/workspace/${uuid}/settings/general`}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                pathname.includes("settings") && "bg-muted text-primary",
+              )}
+            >
+              <Settings className="h-4 w-4" />
+              Settings
             </Link>
           </nav>
         </div>

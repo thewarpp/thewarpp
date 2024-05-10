@@ -41,12 +41,13 @@ model account {
 }
 
 model workspace {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name       String    @db.VarChar(100)
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  member     account[]
-  youtube    youtube?
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String        @db.VarChar(100)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  member      account[]
+  youtube     youtube?
+  oauth_state oauth_state[]
 }
 
 model youtube {
@@ -57,4 +58,12 @@ model youtube {
   access_token  String
   workspace     workspace @relation(fields: [workspace_id], references: [id])
   workspace_id  String    @unique @db.Uuid
+}
+
+model oauth_state {
+  id           BigInt    @id @default(autoincrement())
+  created_at   DateTime  @default(now())
+  state        String
+  workspace    workspace @relation(fields: [workspace_id], references: [id])
+  workspace_id String    @db.Uuid
 }

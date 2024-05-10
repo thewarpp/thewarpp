@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 
 import { cn } from "~/lib/utils";
 
 export const SettingsNav = () => {
   const pathname = usePathname();
+
+  const uuid = useMemo(() => pathname.split("/")[2], [pathname]);
 
   return (
     <nav
@@ -14,7 +17,7 @@ export const SettingsNav = () => {
       x-chunk="dashboard-04-chunk-0"
     >
       <Link
-        href={{ query: { section: "general" } }}
+        href={`/workspace/${uuid}/settings/general`}
         className={cn(
           "py-1",
           pathname.includes("/settings/general")
@@ -25,7 +28,7 @@ export const SettingsNav = () => {
         General
       </Link>
       <Link
-        href={{ query: { section: "connections" } }}
+        href={`/workspace/${uuid}/settings/connections`}
         className={cn(
           "py-1",
           pathname.includes("/settings/connections")

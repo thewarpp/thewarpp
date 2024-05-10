@@ -5,9 +5,7 @@ import { env } from "~/env";
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request: { headers: request.headers },
   });
 
   const supabase = createServerClient(
@@ -25,9 +23,7 @@ export async function updateSession(request: NextRequest) {
             ...options,
           });
           response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
+            request: { headers: request.headers },
           });
           response.cookies.set({
             name,
@@ -42,9 +38,7 @@ export async function updateSession(request: NextRequest) {
             ...options,
           });
           response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
+            request: { headers: request.headers },
           });
           response.cookies.set({
             name,
@@ -60,7 +54,8 @@ export async function updateSession(request: NextRequest) {
 
   if (
     request.nextUrl.pathname.includes("auth/confirm") ||
-    request.nextUrl.pathname === "/"
+    request.nextUrl.pathname === "/" ||
+    request.nextUrl.pathname.includes("youtube/callback")
   ) {
     return response;
   }

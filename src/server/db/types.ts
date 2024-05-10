@@ -14,6 +14,12 @@ export type account = {
     user_id: string;
     workspace_id: string;
 };
+export type oauth_state = {
+    id: Generated<string>;
+    created_at: Generated<Timestamp>;
+    state: string;
+    workspace_id: string;
+};
 export type user = {
     id: Generated<string>;
     first_name: string;
@@ -38,6 +44,7 @@ export type youtube = {
 };
 export type DB = {
     account: account;
+    oauth_state: oauth_state;
     user: user;
     workspace: workspace;
     youtube: youtube;

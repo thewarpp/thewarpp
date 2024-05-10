@@ -18,11 +18,8 @@ import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
-import type {
-  createWorkspaceSchemaType} from "../../_validator/create-workspace";
-import {
-  createWorkspaceSchema
-} from "../../_validator/create-workspace";
+import type { createWorkspaceSchemaType } from "../../_validator/create-workspace";
+import { createWorkspaceSchema } from "../../_validator/create-workspace";
 
 export const CreateWorkspaceForm = ({ className }: { className?: string }) => {
   // useForm

@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createWorkspaceSchema } from "~/app/(app)/_validator/create-workspace";
+import { updateWorkspaceNameSchema } from "~/app/(workspace)/workspace/[id]/settings/general/_validators/update-workspace-name";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
 export const workspaceRouter = createTRPCRouter({
@@ -44,5 +45,17 @@ export const workspaceRouter = createTRPCRouter({
         .where("id", "=", id)
         .returning("id")
         .executeTakeFirst();
+    }),
+
+  updateName: privateProcedure
+    .input(updateWorkspaceNameSchema)
+    .mutation(async ({ ctx: { db }, input: { name, id } }) => {
+      console.log(name);
+      return await db
+        .updateTable("workspace")
+        .set({ name })
+        .where("id", "=", id)
+        .returning("name")
+        .executeTakeFirstOrThrow();
     }),
 });

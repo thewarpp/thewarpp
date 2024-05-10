@@ -1,8 +1,8 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 import { authRouter } from "./routers/auth";
-import { oauthRouter } from "./routers/oauth";
 import { workspaceRouter } from "./routers/workspace";
+import { youtubeRouter } from "./routers/youtube";
 
 /**
  * This is the primary router for your server.
@@ -12,7 +12,7 @@ import { workspaceRouter } from "./routers/workspace";
 export const appRouter = createTRPCRouter({
   auth: authRouter,
   workspace: workspaceRouter,
-  oauth: oauthRouter,
+  youtube: youtubeRouter,
 });
 
 // export type definition of API
