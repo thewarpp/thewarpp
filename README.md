@@ -2,6 +2,6 @@
 
 ## TODO
 
-[ ] - integrate backblaze b2 cloud storage
+[ ] - migrate to cloudflare ecosystem (D1 + R2 + Authjs + open-next)
 [ ] - next-video integration
 [ ] - stripe integration
