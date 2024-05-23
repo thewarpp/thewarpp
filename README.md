@@ -3,7 +3,8 @@
 ## TODO
 
 [x] remove googleapis dependency to make this compatible for edge workers
-[ ] supabase postgres -> D1
+[x] supabase postgres -> D1
+[ ] e2e test D1 & googleapis
 [ ] prisma + kysely -> drizzle
 [ ] supabase auth -> lucia/auth.js
 [ ] backblaze b2 storage integration

@@ -2,7 +2,8 @@ import type { User } from "@supabase/supabase-js";
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
 
-import { db } from "~/server/db";
+import { getDb } from "~/server/db";
+import { user } from "~/server/db/schema";
 import { createClient } from "~/supabase/server";
 
 export const runtime = "edge";
@@ -38,17 +39,14 @@ export async function GET(request: NextRequest) {
             user_metadata: user_metadata;
           };
 
-          await db
-            .insertInto("user")
-            .values({
-              first_name: user_metadata.first_name,
-              last_name: user_metadata.last_name,
-              email: email!,
-              updated_at: new Date(),
-              id: data.user.id,
-            })
-
-            .executeTakeFirstOrThrow();
+          const db = getDb();
+          await db.insert(user).values({
+            first_name: user_metadata.first_name,
+            last_name: user_metadata.last_name,
+            email: email!,
+            updated_at: new Date(),
+            id: data.user.id,
+          });
         } catch (error) {
           redirectTo.searchParams.delete("next");
           return NextResponse.redirect(redirectTo);

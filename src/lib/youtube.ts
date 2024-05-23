@@ -99,7 +99,7 @@ export class Youtube {
       throw new Error("Failed to fetch YouTube channel snippet");
     }
 
-    const data = await response.json();
+    const data: any = await response.json();
     return data.items[0].snippet as Snippet;
   }
 }

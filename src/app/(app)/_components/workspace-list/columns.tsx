@@ -6,7 +6,9 @@ import Link from "next/link";
 
 import { Badge } from "~/components/ui/badge";
 import { buttonVariants } from "~/components/ui/button";
-import type { account_type } from "~/server/db/enums";
+import { account } from "~/server/db/schema";
+
+const account_type = account.type["enumValues"];
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -14,7 +16,7 @@ export interface Workspace {
   id: string;
   name: string;
   created_at: Date;
-  access_type: account_type;
+  access_type: (typeof account_type)[number];
 }
 
 export const columns: ColumnDef<Workspace>[] = [

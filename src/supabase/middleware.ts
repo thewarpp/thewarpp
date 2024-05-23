@@ -1,8 +1,10 @@
 import { type CookieOptions, createServerClient } from "@supabase/ssr";
+import { eq, or } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { env } from "~/env";
-import { db } from "~/server/db";
+import { getDb } from "~/server/db";
+import { account, workspace as workspaceSchema } from "~/server/db/schema";
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
@@ -74,17 +76,15 @@ export async function updateSession(request: NextRequest) {
 
   if (request.nextUrl.pathname.includes("workspace")) {
     const uuid = request.nextUrl.pathname.split("/")[2]!;
+    const db = getDb();
     const workspace = await db
-      .selectFrom("workspace")
-      .innerJoin("account as a", "a.workspace_id", "workspace.id")
-      .where(($) =>
-        $.and([
-          $.eb("a.user_id", "=", data.user!.id),
-          $.eb("workspace.id", "=", uuid),
-        ]),
+      .select({ name: workspaceSchema.name })
+      .from(workspaceSchema)
+      .innerJoin(account, eq(workspaceSchema.id, account.workspace_id))
+      .where(
+        or(eq(account.user_id, data.user!.id), eq(workspaceSchema.id, uuid)),
       )
-      .select("name")
-      .executeTakeFirst();
+      .get();
 
     if (!workspace?.name) {
       return NextResponse.redirect("/not-found");

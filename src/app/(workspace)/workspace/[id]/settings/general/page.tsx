@@ -1,7 +1,9 @@
+import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { db } from "~/server/db";
+import { getDb } from "~/server/db";
+import { workspace as workspaceSchema } from "~/server/db/schema";
 
 import UpdateWorkspaceName from "./_components/update-workspace-name";
 
@@ -12,10 +14,13 @@ export default async function Page({
 }: {
   params: { id: string };
 }) {
+  const db = getDb();
   const workspace = await db
-    .selectFrom("workspace")
-    .select(["workspace.name"])
-    .executeTakeFirst();
+    .select({ name: workspaceSchema.name })
+    .from(workspaceSchema)
+    .where(eq(workspaceSchema.id, id))
+    .limit(1)
+    .get();
 
   if (!workspace) {
     notFound();

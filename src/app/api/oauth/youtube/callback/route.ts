@@ -1,7 +1,9 @@
+import { eq } from "drizzle-orm";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { Youtube } from "~/lib/youtube";
-import { db } from "~/server/db";
+import { getDb } from "~/server/db";
+import { oauth_state, youtube } from "~/server/db/schema";
 
 export const dynamic = "force-dynamic"; // defaults to auto
 export const runtime = "edge";
@@ -31,11 +33,12 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const oauthState = await db
-      .selectFrom("oauth_state")
-      .select(["state", "id"])
-      .where("workspace_id", "=", workspaceId!)
-      .executeTakeFirst();
+    const db = getDb();
+    const [oauthState] = await db
+      .select({ state: oauth_state.state, id: oauth_state.id })
+      .from(oauth_state)
+      .limit(1)
+      .where(eq(oauth_state.workspace_id, workspaceId!));
 
     if (!oauthState?.state || state !== oauthState.state) {
       // Check state for CSRF protection
@@ -54,12 +57,12 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const tokens = await tokenResponse.json();
+    const tokens: any = await tokenResponse.json();
 
     // Store refresh token securely
     await Promise.all([
       db
-        .insertInto("youtube")
+        .insert(youtube)
         .values({
           updated_at: new Date(),
           refresh_token: tokens.refresh_token!,
@@ -67,7 +70,7 @@ export async function GET(request: NextRequest) {
           workspace_id: workspaceId,
         })
         .execute(),
-      db.deleteFrom("oauth_state").where("id", "=", oauthState.id).execute(),
+      db.delete(oauth_state).where(eq(oauth_state.id, oauthState.id)),
     ]);
 
     return NextResponse.redirect(

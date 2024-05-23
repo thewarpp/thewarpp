@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { eq } from "drizzle-orm";
 
 import {
   signInFormSchema,
@@ -6,6 +7,7 @@ import {
 } from "~/app/(auth)/auth/login/_validators";
 import { env } from "~/env";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { user as userSchema } from "~/server/db/schema";
 import { createClient } from "~/supabase/server";
 
 export const authRouter = createTRPCRouter({
@@ -14,11 +16,11 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { first_name, last_name, email } = input;
 
-      const user = await ctx.db
-        .selectFrom("user")
-        .where("email", "=", email)
-        .select("id")
-        .executeTakeFirst();
+      const [user] = await ctx.db
+        .select({ id: userSchema.id })
+        .from(userSchema)
+        .limit(1)
+        .where(eq(userSchema.email, email));
 
       if (user?.id) {
         throw new TRPCError({
@@ -54,11 +56,11 @@ export const authRouter = createTRPCRouter({
   signIn: publicProcedure
     .input(signInFormSchema)
     .mutation(async ({ ctx, input }) => {
-      const user = await ctx.db
-        .selectFrom("user")
-        .where("email", "=", input.email)
-        .select("id")
-        .executeTakeFirst();
+      const [user] = await ctx.db
+        .select({ id: userSchema.id })
+        .from(userSchema)
+        .limit(1)
+        .where(eq(userSchema.email, input.email));
 
       if (!user?.id) {
         throw new TRPCError({
