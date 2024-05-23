@@ -15,6 +15,10 @@ const config = {
       }),
     );
 
+    config.externals.push({
+      "node:crypto": "commonjs crypto",
+    });
+
     return config;
   },
 };

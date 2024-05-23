@@ -1,9 +1,10 @@
-import { type NextRequest,NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
-import { oauth2Client } from "~/server/constants";
+import { Youtube } from "~/lib/youtube";
 import { db } from "~/server/db";
 
 export const dynamic = "force-dynamic"; // defaults to auto
+export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   try {
@@ -44,27 +45,30 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Exchange authorization code for tokens
-    const [{ tokens }] = await Promise.all([
-      oauth2Client.getToken(code!),
+    const tokenResponse = await Youtube.getTokenResponse(code!);
+
+    if (!tokenResponse.ok) {
+      console.error("Failed to exchange authorization code for tokens");
+      return new Response("Error during OAuth flow", {
+        status: 400,
+      });
+    }
+
+    const tokens = await tokenResponse.json();
+
+    // Store refresh token securely
+    await Promise.all([
+      db
+        .insertInto("youtube")
+        .values({
+          updated_at: new Date(),
+          refresh_token: tokens.refresh_token!,
+          access_token: tokens.access_token!,
+          workspace_id: workspaceId,
+        })
+        .execute(),
       db.deleteFrom("oauth_state").where("id", "=", oauthState.id).execute(),
     ]);
-
-    oauth2Client.setCredentials(tokens);
-
-    // **Security: Store refresh token securely (avoid global variables)**
-    // - Consider using a secure database like MongoDB or a key-value store
-    // - Implement proper access control mechanisms
-    // Example usage (replace with your actual logic)
-    await db
-      .insertInto("youtube")
-      .values({
-        updated_at: new Date(),
-        refresh_token: tokens.refresh_token!,
-        access_token: tokens.access_token!,
-        workspace_id: workspaceId,
-      })
-      .execute();
 
     return NextResponse.redirect(
       `workspace/${workspaceId}/settings/connections`,

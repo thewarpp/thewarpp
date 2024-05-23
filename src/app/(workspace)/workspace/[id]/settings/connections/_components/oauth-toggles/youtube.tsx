@@ -23,9 +23,9 @@ const YoutubeToggle = ({
   id,
   youtubeId,
 }: {
-  youtube: Youtube | undefined;
+  youtube?: Youtube;
   id: string;
-  youtubeId: string | undefined;
+  youtubeId?: string;
 }) => {
   // router
   const router = useRouter();

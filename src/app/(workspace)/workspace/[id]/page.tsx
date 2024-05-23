@@ -1,6 +1,8 @@
 import { db } from "~/server/db";
 
-import { NoSocialConnection } from "../../_components/no-social-connection";
+import { NoSocialConnection } from "./_components/no-social-connection";
+
+export const runtime = "edge";
 
 export default async function Page({
   params: { id },
@@ -10,6 +12,7 @@ export default async function Page({
   const youtube = await db
     .selectFrom("youtube")
     .where("workspace_id", "=", id)
+    .limit(1)
     .executeTakeFirst();
 
   return (

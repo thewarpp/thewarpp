@@ -5,6 +5,8 @@ import { db } from "~/server/db";
 
 import UpdateWorkspaceName from "./_components/update-workspace-name";
 
+export const runtime = "edge";
+
 export default async function Page({
   params: { id },
 }: {

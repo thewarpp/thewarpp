@@ -2,6 +2,8 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 
 import SocialConnections from "./_components/social-connections";
 
+export const runtime = "edge";
+
 export default async function Page({
   params: { id },
 }: {

@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 import { CreateWorkspace } from "../_components/create-workspace";
 
+export const runtime = "edge";
+
 const WorkspaceList = nextDynamic(
   () => import("../_components/workspace-list"),
   {

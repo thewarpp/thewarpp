@@ -10,7 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { SignInForm } from "./_components/sign-in-form";
 import { SignUpForm } from "./_components/sign-up-form";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default async function LoginPage() {
   return (
