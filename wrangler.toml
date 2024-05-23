@@ -1,1 +1,9 @@
-compatibility_flags = [ "nodejs_compat" ]
+name = "thewarpp"
+node_compat = true
+compatibility_flags = ["nodejs_compat"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "thewarpp"
+database_id = "b54fe8e0-46a8-46f7-907d-55517299e30d"
+preview_database_id = "DB"

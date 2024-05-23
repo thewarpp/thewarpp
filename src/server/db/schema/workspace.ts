@@ -4,7 +4,7 @@ import { int, text } from "drizzle-orm/sqlite-core";
 
 import { createTable } from "../create-table";
 
-export const workspace = createTable("account", {
+export const workspace = createTable("workspace", {
   id: text("id")
     .$defaultFn(() => createId())
     .notNull(),
