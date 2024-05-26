@@ -13,7 +13,7 @@ export default async function SocialConnections({ id }: { id: string }) {
   const youtube = await db
     .select()
     .from(youtubeSchema)
-    .where(eq(youtubeSchema.id, id))
+    .where(eq(youtubeSchema.workspace_id, id))
     .limit(1)
     .get();
 
@@ -34,7 +34,7 @@ export default async function SocialConnections({ id }: { id: string }) {
 
   let channel: Snippet | null = null;
   try {
-    const tokens: any = await Youtube.refreshAccessToken(youtube.refresh_token);
+    const tokens = await Youtube.refreshAccessToken(youtube.refresh_token);
     channel = await Youtube.getYouTubeChannelSnippet(tokens.access_token);
   } catch (error) {
     console.log(error);

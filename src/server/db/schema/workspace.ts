@@ -6,8 +6,8 @@ import { createTable } from "../create-table";
 
 export const workspace = createTable("workspace", {
   id: text("id")
-    .$defaultFn(() => createId())
-    .notNull(),
+    .primaryKey()
+    .$defaultFn(() => createId()),
   created_at: int("created_at", { mode: "timestamp" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

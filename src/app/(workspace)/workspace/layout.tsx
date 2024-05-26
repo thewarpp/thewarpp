@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
-
-import { Header } from "~/components/workspace/header";
-import { SideBar } from "~/components/workspace/sidebar";
+import { SideBar } from "./_components/layout/sidebar";
+import { Header } from "./_components/layout/header";
 
 export default async function Layout({ children }: { children: ReactNode }) {
   return (

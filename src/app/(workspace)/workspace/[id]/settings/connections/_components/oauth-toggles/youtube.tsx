@@ -38,10 +38,16 @@ const YoutubeToggle = ({
       },
     });
 
+  const { mutate: disconnect, isPending: disconnecting } =
+    api.youtube.disconnect.useMutation({
+      onSuccess: router.refresh,
+    });
+
   // handlers
   const onToggle = useCallback(() => {
     if (!youtube) authorize({ id });
-  }, [authorize, id, youtube]);
+    else disconnect({ id });
+  }, [authorize, disconnect, id, youtube]);
 
   return (
     <div className="space-y-2">
@@ -49,11 +55,15 @@ const YoutubeToggle = ({
       <div className="flex flex-row items-center gap-x-3">
         <YoutubeIcon />
         <Switch
-          disabled={isPending}
+          disabled={isPending || disconnecting}
           onCheckedChange={onToggle}
           checked={!!youtube}
         />
-        {isPending ? <Loader className="size-4 animate-spin" /> : null}
+
+        {isPending || disconnecting ? (
+          <Loader className="size-4 animate-spin" />
+        ) : null}
+
         {youtubeId ? (
           <Link
             href={`https://youtube.com/${youtubeId}`}

@@ -9,7 +9,8 @@ import { workspace } from "./workspace";
 export const account = createTable("account", {
   id: text("id")
     .$defaultFn(() => createId())
-    .notNull(),
+    .notNull()
+    .primaryKey(),
   created_at: int("created_at", { mode: "timestamp" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

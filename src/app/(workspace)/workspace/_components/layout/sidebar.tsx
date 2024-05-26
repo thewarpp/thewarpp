@@ -11,15 +11,15 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Badge } from "../ui/badge";
+} from "~/components/ui/card";
+import { Badge } from "~/components/ui/badge";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { cn } from "~/lib/utils";
@@ -53,6 +53,7 @@ export const SideBar = () => {
                 !pathname.includes("drafts") &&
                 !pathname.includes("scheduled") &&
                 !pathname.includes("members") &&
+                !pathname.includes("settings") &&
                 "bg-muted text-primary",
               )}
             >

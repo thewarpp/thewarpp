@@ -8,7 +8,8 @@ import { workspace } from "./workspace";
 export const oauth_state = createTable("oauth_state", {
   id: text("id")
     .$defaultFn(() => createId())
-    .notNull(),
+    .notNull()
+    .primaryKey(),
   created_at: int("created_at", { mode: "timestamp" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

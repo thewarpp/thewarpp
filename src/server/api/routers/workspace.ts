@@ -11,13 +11,16 @@ export const workspaceRouter = createTRPCRouter({
   create: privateProcedure
     .input(createWorkspaceSchema)
     .mutation(async ({ ctx: { db, user }, input }) => {
-      await db.transaction(async ($) => {
-        const [workspace] = await $.insert(workspaceSchema)
+      try {
+        const [workspace] = await db
+          .insert(workspaceSchema)
           .values({
             name: input.name,
             updated_at: new Date(),
           })
-          .returning({ id: workspaceSchema.id });
+          .returning({ id: workspaceSchema.id })
+          .execute();
+        console.log(workspace);
 
         if (!workspace?.id) {
           return new TRPCError({
@@ -26,13 +29,15 @@ export const workspaceRouter = createTRPCRouter({
           });
         }
 
-        await $.insert(account).values({
+        await db.insert(account).values({
           updated_at: new Date(),
           workspace_id: workspace.id,
           user_id: user.id,
           type: "CREATOR",
         });
-      });
+      } catch (error) {
+        console.log(error);
+      }
       return;
     }),
 

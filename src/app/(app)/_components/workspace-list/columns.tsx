@@ -25,7 +25,10 @@ export const columns: ColumnDef<Workspace>[] = [
     header: "Name",
   },
   {
-    accessorFn: (row) => row.created_at.toDateString(),
+    accessorFn: (row) =>
+      new Date(
+        new Date().setMilliseconds(row.created_at as any as number),
+      ).toDateString(),
     header: "created at",
   },
   {

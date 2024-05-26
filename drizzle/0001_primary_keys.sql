@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `thewarpp_youtube_workspace_id_unique` ON `thewarpp_youtube` (`workspace_id`);

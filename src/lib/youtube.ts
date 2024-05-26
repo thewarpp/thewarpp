@@ -31,6 +31,14 @@ export interface Snippet {
   country: string;
 }
 
+interface TokenResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+  token_type: string;
+}
+
 export class Youtube {
   static async getTokenResponse(code: string) {
     return await fetch("https://oauth2.googleapis.com/token", {
@@ -45,7 +53,7 @@ export class Youtube {
         redirect_uri: env.YOUR_REDIRECT_URL,
         grant_type: "authorization_code",
       }),
-    });
+    }).then((res) => res.json() as Promise<TokenResponse>);
   }
 
   static async getAuthorizationUrl(state: string, id: string) {
@@ -81,7 +89,7 @@ export class Youtube {
       throw new Error("Failed to refresh access token");
     }
 
-    return response.json();
+    return response.json() as Promise<TokenResponse>;
   }
 
   static async getYouTubeChannelSnippet(accessToken: string) {

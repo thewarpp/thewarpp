@@ -17,19 +17,24 @@ const WorkpsaceList = async () => {
   }
 
   const db = getDb();
-  const list = await db
-    .select({
-      access_type: account.type,
-      id: workspace.id,
-      name: workspace.name,
-      created_at: workspace.created_at,
-    })
-    .from(workspace)
-    .innerJoin(account, eq(workspace.id, account.workspace_id))
-    .where(or(eq(account.user_id, data.user.id), eq(account.type, "CREATOR")))
-    .limit(10);
+  try {
+    const list = await db
+      .select({
+        access_type: account.type,
+        id: workspace.id,
+        name: workspace.name,
+        created_at: workspace.created_at,
+      })
+      .from(workspace)
+      .innerJoin(account, eq(workspace.id, account.workspace_id))
+      .where(or(eq(account.user_id, data.user.id), eq(account.type, "CREATOR")))
+      .limit(10);
 
-  return <DataTable columns={columns} data={list} />;
+    return <DataTable columns={columns} data={list} />;
+  } catch (error) {
+    console.log(error);
+    return <DataTable columns={columns} data={[]} />;
+  }
 };
 
 export default WorkpsaceList;

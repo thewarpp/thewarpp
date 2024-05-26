@@ -56,11 +56,12 @@ export const authRouter = createTRPCRouter({
   signIn: publicProcedure
     .input(signInFormSchema)
     .mutation(async ({ ctx, input }) => {
-      const [user] = await ctx.db
+      const user = await ctx.db
         .select({ id: userSchema.id })
         .from(userSchema)
         .limit(1)
-        .where(eq(userSchema.email, input.email));
+        .where(eq(userSchema.email, input.email))
+        .get();
 
       if (!user?.id) {
         throw new TRPCError({

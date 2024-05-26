@@ -48,17 +48,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const tokenResponse = await Youtube.getTokenResponse(code!);
-
-    if (!tokenResponse.ok) {
-      console.error("Failed to exchange authorization code for tokens");
-      return new Response("Error during OAuth flow", {
-        status: 400,
-      });
-    }
-
-    const tokens: any = await tokenResponse.json();
-
+    const tokens = await Youtube.getTokenResponse(code!);
     // Store refresh token securely
     await Promise.all([
       db
@@ -73,9 +63,9 @@ export async function GET(request: NextRequest) {
       db.delete(oauth_state).where(eq(oauth_state.id, oauthState.id)),
     ]);
 
-    return NextResponse.redirect(
-      `workspace/${workspaceId}/settings/connections`,
-    );
+    const url = request.nextUrl.clone();
+    url.pathname = `workspace/${workspaceId}/settings/connections`;
+    return NextResponse.redirect(url);
   } catch (error) {
     console.log("error");
     console.log(error);

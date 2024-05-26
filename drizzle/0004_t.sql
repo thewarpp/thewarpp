@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS `thewarpp_youtube_workspace_id_unique`;

@@ -58,7 +58,8 @@ export async function updateSession(request: NextRequest) {
   if (
     request.nextUrl.pathname.includes("auth/confirm") ||
     request.nextUrl.pathname === "/" ||
-    request.nextUrl.pathname.includes("youtube/callback")
+    request.nextUrl.pathname.includes("youtube/callback") ||
+    request.nextUrl.pathname.includes("trpc")
   ) {
     return response;
   }
